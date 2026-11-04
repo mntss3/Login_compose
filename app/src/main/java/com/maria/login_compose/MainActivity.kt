@@ -16,6 +16,14 @@ import androidx.compose.ui.Modifier
 import com.maria.login_compose.ui.LoginScreen
 import com.maria.login_compose.ui.WelcomeScreen
 import com.maria.login_compose.ui.theme.Login_composeTheme
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,8 +32,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         // setContent: aquí empieza Compose. Todo lo de dentro es interfaz declarativa.
         setContent {
-            Login_composeTheme {
-                App()
+            val sistemaEnOscuro = isSystemInDarkTheme()
+            var modoOscuro by rememberSaveable { mutableStateOf(sistemaEnOscuro) }
+
+            Login_composeTheme(darkTheme = modoOscuro) {
+                App(
+                    modoOscuro = modoOscuro,
+                    onCambiarModo = { modoOscuro = !modoOscuro },
+                )
             }
         }
     }
@@ -46,31 +60,47 @@ class MainActivity : ComponentActivity() {
  * pantalla de login desaparece de la composición y su estado (lo que se había
  * escrito) se descarta. Al volver, Compose la crea de cero y los campos están vacíos.
  */
+
 @Composable
-private fun App() {
+private fun App(
+    modoOscuro: Boolean,
+    onCambiarModo: () -> Unit,
+) {
     var nombreUsuario by rememberSaveable { mutableStateOf<String?>(null) }
 
-    // Scaffold nos da el fondo del tema y calcula "innerPadding":
-    // el espacio que ocupan las barras del sistema, para no taparnos con ellas.
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        val modifier = Modifier.padding(innerPadding)
-        val nombre = nombreUsuario
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+        ) {
+            val nombre = nombreUsuario
 
-        if (nombre == null) {
-            // onLoginCorrecto se ejecuta cuando el login acierta; "it" es el nombre recibido.
-            LoginScreen(
-                onLoginCorrecto = { nombreUsuario = it },
-                modifier = modifier,
-            )
-        } else {
-            // Pasamos el nombre como parámetro a la segunda pantalla.
-            // onCerrarSesion se ejecuta al pulsar el botón: borramos el nombre y
-            // el "if" de arriba vuelve a mostrar el login.
-            WelcomeScreen(
-                nombre = nombre,
-                onCerrarSesion = { nombreUsuario = null },
-                modifier = modifier,
-            )
+            if (nombre == null) {
+                LoginScreen(
+                    onLoginCorrecto = { nombreUsuario = it },
+                )
+            } else {
+                WelcomeScreen(
+                    nombre = nombre,
+                    onCerrarSesion = { nombreUsuario = null },
+                )
+            }
+
+            IconButton(
+                onClick = onCambiarModo,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp),
+            ) {
+                Icon(
+                    painter = painterResource(
+                        if (modoOscuro) R.drawable.ic_light_mode else R.drawable.ic_dark_mode
+                    ),
+                    contentDescription = if (modoOscuro) "Cambiar a modo claro" else "Cambiar a modo oscuro",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }

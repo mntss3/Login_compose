@@ -162,17 +162,18 @@ fun LoginScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // --- Botón principal: AQUÍ ESTÁ LA LÓGICA DEL LOGIN ---
+        // --- Botón principal: LÓGICA DEL LOGIN ---
         Button(
             onClick = {
                 // Comparamos lo escrito con los datos de prueba.
                 // trim() quita espacios sobrantes al principio y al final del correo.
                 if (email.trim() == CORREO_CORRECTO && password == CLAVE_CORRECTA) {
-                    onLoginCorrecto(NOMBRE_USUARIO)   // ¡acertó! Avisamos y enviamos el nombre
+                    onLoginCorrecto(NOMBRE_USUARIO)   // Correcto. Avisamos y enviamos el nombre
                 } else {
                     hayError = true                   // falló: mostramos el error
                 }
             },
+            enabled = email.isNotBlank() && password.isNotBlank(), // si uno o ambos campos están vacíos, el botón de inicio de sesión se inhabilita
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("Iniciar sesión")

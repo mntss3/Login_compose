@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -83,13 +84,13 @@ fun LoginScreen(
         LogoCircular(icono = R.drawable.ic_lock, tamanoIcono = 32.dp)
         Spacer(Modifier.height(24.dp))
         Text(
-            text = "Bienvenido",
+            text = stringResource(R.string.login_titulo),
             style = MaterialTheme.typography.headlineMedium,   // estilo del tema, no tamaños sueltos
             color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = "Inicia sesión para continuar",
+            text = stringResource(R.string.login_subtitulo),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -105,7 +106,7 @@ fun LoginScreen(
                 email = it           // guardamos lo escrito en el estado
                 hayError = false     // y quitamos el error mientras el usuario corrige
             },
-            label = { Text("Correo electrónico") },
+            label = { Text(stringResource(R.string.campo_correo)) },
             singleLine = true,
             isError = hayError,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -121,11 +122,11 @@ fun LoginScreen(
                 password = it
                 hayError = false
             },
-            label = { Text("Contraseña") },
+            label = { Text(stringResource(R.string.campo_contrasena)) },
             singleLine = true,
             isError = hayError,
             // "supportingText" es el texto pequeño bajo el campo: solo lo mostramos si hay error.
-            supportingText = { if (hayError) Text("Correo o contraseña incorrectos") },
+            supportingText = { if (hayError) Text(stringResource(R.string.error_login)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             // Si la contraseña es visible mostramos el texto tal cual; si no, puntos.
             visualTransformation = if (passwordVisible) {
@@ -140,7 +141,7 @@ fun LoginScreen(
                         painter = painterResource(
                             if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
                         ),
-                        contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
+                        contentDescription = if (passwordVisible) stringResource(R.string.ocultar_contrasena) else stringResource(R.string.mostrar_contrasena),
                     )
                 }
             },
@@ -156,7 +157,7 @@ fun LoginScreen(
             horizontalArrangement = Arrangement.End,
         ) {
             TextButton(onClick = { /* pendiente: recuperar contraseña */ }) {
-                Text("¿Olvidaste tu contraseña?")
+                Text(stringResource(R.string.olvidaste_contrasena))
             }
         }
 
@@ -176,7 +177,7 @@ fun LoginScreen(
             enabled = email.isNotBlank() && password.isNotBlank(), // si uno o ambos campos están vacíos, el botón de inicio de sesión se inhabilita
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text("Iniciar sesión")
+            Text(stringResource(R.string.boton_iniciar_sesion))
         }
 
         Spacer(Modifier.height(24.dp))
@@ -186,7 +187,7 @@ fun LoginScreen(
             // weight(1f) reparte el ancho: cada línea ocupa la mitad de lo que sobra.
             HorizontalDivider(modifier = Modifier.weight(1f))
             Text(
-                text = "o",
+                text = "stringResource(R.string.separador_o)",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -203,7 +204,7 @@ fun LoginScreen(
             // Texto en el color primario (lila), como en el diseño de Figma.
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         ) {
-            Text("Continuar con Google")
+            Text(stringResource(R.string.continuar_google))
         }
 
         // Este Spacer "elástico" ocupa TODO el espacio libre que sobra,
@@ -217,12 +218,12 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "¿No tienes cuenta?",
+                text = stringResource(R.string.no_tienes_cuenta),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             TextButton(onClick = { /* pendiente: pantalla de registro */ }) {
-                Text("Regístrate")
+                Text(stringResource(R.string.registrate))
             }
         }
 

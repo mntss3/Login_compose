@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.maria.login_compose.R
@@ -58,7 +59,7 @@ fun WelcomeScreen(
         Spacer(Modifier.height(24.dp))
 
         Text(
-            text = "Bienvenido",
+            text = stringResource(R.string.welcome_titulo),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -83,7 +84,7 @@ fun WelcomeScreen(
             onClick = onCerrarSesion,
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         ) {
-            Text("Cerrar sesión")
+            Text(stringResource(R.string.boton_cerrar_sesion))
         }
 
         Spacer(Modifier.height(16.dp))

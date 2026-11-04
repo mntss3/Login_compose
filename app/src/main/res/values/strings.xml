@@ -1,3 +1,24 @@
 <resources>
+
+    // login screen
     <string name="app_name">Login_compose</string>
+    <string name="login_titulo">Te damos la bienvenida</string>
+    <string name="login_subtitulo">Inicia sesión para continuar</string>
+    <string name="campo_correo">Correo electrónico</string>
+    <string name="campo_contrasena">Contraseña</string>
+    <string name="error_login">Correo o contraseña incorrectos</string>
+    <string name="mostrar_contrasena">Mostrar contraseña</string>
+    <string name="ocultar_contrasena">Ocultar contraseña</string>
+    <string name="olvidaste_contrasena">¿Olvidaste tu contraseña?</string>
+    <string name="boton_iniciar_sesion">Iniciar sesión</string>
+    <string name="separador_o">o</string>
+    <string name="continuar_google">Continuar con Google</string>
+    <string name="no_tienes_cuenta">¿No tienes cuenta?</string>
+    <string name="registrate">Regístrate</string>
+    <string name="boton_cerrar_sesion">Cerrar sesión</string>
+    <string name="modo_claro">Cambiar a modo claro</string>
+    <string name="modo_oscuro">Cambiar a modo oscuro</string>
+
+    // welcome screen
+    <string name="welcome_titulo">¡Qué bien verte!</string>
 </resources>

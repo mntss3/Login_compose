@@ -1,15 +1,19 @@
 package com.maria.login_compose.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -65,12 +69,17 @@ fun LoginScreen(
 
     // ---------- DISEÑO ----------
     // Column = apila los elementos en vertical (como un Auto Layout vertical en Figma).
-    Column(
+    BoxWithConstraints(
         modifier = modifier
-            .fillMaxSize()                 // ocupa toda la pantalla
-            .padding(horizontal = 24.dp)   // margen lateral de 24 como en Figma
-            .imePadding(),                 // sube el contenido cuando aparece el teclado
+            .fillMaxSize()
+            .imePadding(),
     ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .heightIn(min = maxHeight)
+                .padding(horizontal = 24.dp),
+        ) {
         Spacer(Modifier.height(40.dp))     // Spacer = espacio vacío
 
         // --- Cabecera: logo + título + subtítulo ---
@@ -212,6 +221,7 @@ fun LoginScreen(
         }
 
         Spacer(Modifier.height(16.dp))
+    }
     }
 }
 

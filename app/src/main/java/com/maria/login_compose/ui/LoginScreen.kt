@@ -35,15 +35,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maria.login_compose.R
 import com.maria.login_compose.ui.theme.Login_composeTheme
-
-// ---------- DATOS DE PRUEBA (hardcodeados) ----------
-// En una app real estos datos vendrían de un servidor o de una base de datos.
-// Para el taller los dejamos escritos aquí, a la vista de todos.
-private const val CORREO_CORRECTO = "montesm.mail@gmail.com"
-private const val CLAVE_CORRECTA = "1234"
-private const val NOMBRE_USUARIO = "María"
 
 /*
  * PANTALLA 1: LOGIN
@@ -60,15 +54,14 @@ private const val NOMBRE_USUARIO = "María"
 fun LoginScreen(
     onLoginCorrecto: (nombre: String) -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = viewModel(),
 ) {
 
     // ---------- ESTADO ----------
-    // "rememberSaveable" guarda el valor mientras la pantalla está viva (y aunque
-    // se gire el móvil); "mutableStateOf" avisa a Compose cuando cambia para que redibuje.
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var hayError by rememberSaveable { mutableStateOf(false) }   // ¿mostramos el aviso de error?
+    var email = viewModel.email
+    var password = viewModel.password
+    var passwordVisible = viewModel.passwordVisible
+    var hayError = viewModel.hayError  // ¿mostramos el aviso de error?
 
     // ---------- DISEÑO ----------
     // Column = apila los elementos en vertical (como un Auto Layout vertical en Figma).
@@ -102,10 +95,7 @@ fun LoginScreen(
         // la etiqueta flotante y el borde morado al enfocar. "isError" lo pone rojo.
         OutlinedTextField(
             value = email,
-            onValueChange = {
-                email = it           // guardamos lo escrito en el estado
-                hayError = false     // y quitamos el error mientras el usuario corrige
-            },
+            onValueChange = { viewModel.onEmailChange(it) }, // viewmodel
             label = { Text(stringResource(R.string.campo_correo)) },
             singleLine = true,
             isError = hayError,
@@ -118,10 +108,7 @@ fun LoginScreen(
         // --- Campo de contraseña ---
         OutlinedTextField(
             value = password,
-            onValueChange = {
-                password = it
-                hayError = false
-            },
+            onValueChange = { viewModel.onPasswordChange(it) }, // viewmodel
             label = { Text(stringResource(R.string.campo_contrasena)) },
             singleLine = true,
             isError = hayError,
@@ -136,7 +123,7 @@ fun LoginScreen(
             },
             // Icono del ojo a la derecha: al pulsarlo cambia el estado.
             trailingIcon = {
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                IconButton(onClick = { viewModel.cambiarVisibilidad() }) { // viewmodel
                     Icon(
                         painter = painterResource(
                             if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
@@ -164,17 +151,14 @@ fun LoginScreen(
         Spacer(Modifier.height(16.dp))
 
         // --- Botón principal: LÓGICA DEL LOGIN ---
-        Button(
+        Button( //viewmodel
             onClick = {
-                // Comparamos lo escrito con los datos de prueba.
-                // trim() quita espacios sobrantes al principio y al final del correo.
-                if (email.trim() == CORREO_CORRECTO && password == CLAVE_CORRECTA) {
-                    onLoginCorrecto(NOMBRE_USUARIO)   // Correcto. Avisamos y enviamos el nombre
-                } else {
-                    hayError = true                   // falló: mostramos el error
+                val nombre = viewModel.iniciarSesion()
+                if (nombre != null) {
+                    onLoginCorrecto(nombre)
                 }
             },
-            enabled = email.isNotBlank() && password.isNotBlank(), // si uno o ambos campos están vacíos, el botón de inicio de sesión se inhabilita
+            enabled = email.isNotBlank() && password.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(stringResource(R.string.boton_iniciar_sesion))
@@ -187,7 +171,7 @@ fun LoginScreen(
             // weight(1f) reparte el ancho: cada línea ocupa la mitad de lo que sobra.
             HorizontalDivider(modifier = Modifier.weight(1f))
             Text(
-                text = "stringResource(R.string.separador_o)",
+                text = stringResource(R.string.separador_o),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp),

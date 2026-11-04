@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
@@ -97,7 +98,7 @@ private fun App(
                     painter = painterResource(
                         if (modoOscuro) R.drawable.ic_light_mode else R.drawable.ic_dark_mode
                     ),
-                    contentDescription = if (modoOscuro) "Cambiar a modo claro" else "Cambiar a modo oscuro",
+                    contentDescription = if (modoOscuro) stringResource(R.string.modo_claro) else stringResource(R.string.modo_oscuro),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }

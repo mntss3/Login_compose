@@ -29,6 +29,8 @@ import com.maria.login_compose.ui.theme.Login_composeTheme
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.annotation.StringRes
+import java.time.LocalTime
 
 /*
  * PANTALLA 2: BIENVENIDA
@@ -58,8 +60,9 @@ fun WelcomeScreen(
 
         Spacer(Modifier.height(24.dp))
 
+        // saludo según la hora del dispositivo
         Text(
-            text = stringResource(R.string.welcome_titulo),
+            text = stringResource(saludoSegunHora()),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -68,6 +71,13 @@ fun WelcomeScreen(
             text = nombre,   // <- el parámetro que nos envió la pantalla de login
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
+        )
+
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.welcome_titulo),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Spacer(Modifier.height(24.dp))
@@ -99,6 +109,15 @@ fun WelcomeScreen(
  * un lienzo de 312 x 400 (las medidas del diseño en Figma) y se escalan
  * con "u" para que el dibujo quepa en el espacio disponible de cualquier pantalla.
  */
+@StringRes
+private fun saludoSegunHora(): Int {
+    val hora = LocalTime.now().hour
+    return when (hora) {
+        in 6..13 -> R.string.buenos_dias
+        in 14..20 -> R.string.buenas_tardes
+        else -> R.string.buenas_noches
+    }
+}
 @Composable
 private fun Fireworks(modifier: Modifier = Modifier) {
     // Los colores se leen del tema ANTES de entrar en el Canvas.

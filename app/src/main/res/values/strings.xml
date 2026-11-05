@@ -21,4 +21,10 @@
 
     // welcome screen
     <string name="welcome_titulo">¡Qué bien verte!</string>
+
+
+    // saludos según la hora
+    <string name="buenos_dias">Buenos días,</string>
+    <string name="buenas_tardes">Buenas tardes,</string>
+    <string name="buenas_noches">Buenas noches,</string>
 </resources>

@@ -21,6 +21,10 @@ class LoginViewModel : ViewModel() {
     var hayError by mutableStateOf(false)
         private set
 
+    // Cuenta los fallos; cada vez que sube, la pantalla hace temblar el formulario
+    var intentosFallidos by mutableStateOf(0)
+        private set
+
     fun onEmailChange(nuevo: String) {
         email = nuevo
         hayError = false
@@ -41,6 +45,7 @@ class LoginViewModel : ViewModel() {
             NOMBRE_USUARIO
         } else {
             hayError = true
+            intentosFallidos++
             null
         }
     }
@@ -50,5 +55,6 @@ class LoginViewModel : ViewModel() {
         password = ""
         passwordVisible = false
         hayError = false
+        intentosFallidos = 0
     }
 }

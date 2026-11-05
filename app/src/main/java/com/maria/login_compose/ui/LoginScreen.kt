@@ -42,6 +42,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maria.login_compose.R
 import com.maria.login_compose.ui.theme.Login_composeTheme
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.offset
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 
 /*
  * PANTALLA 1: LOGIN
@@ -66,6 +71,19 @@ fun LoginScreen(
     var password = viewModel.password
     var passwordVisible = viewModel.passwordVisible
     var hayError = viewModel.hayError  // ¿mostramos el aviso de error?
+
+
+    // ---------- TEMBLOR AL FALLAR ----------
+    // Animatable guarda un número que podemos animar (cuántos dp se mueve el formulario)
+    val temblor = remember { Animatable(0f) }
+    // Se ejecuta cada vez que cambia intentosFallidos: izquierda-derecha hasta volver a 0
+    LaunchedEffect(viewModel.intentosFallidos) {
+        if (viewModel.intentosFallidos > 0) {
+            for (posicion in listOf(-14f, 14f, -9f, 9f, -4f, 0f)) {
+                temblor.animateTo(posicion, animationSpec = tween(durationMillis = 50))
+            }
+        }
+    }
 
     // ---------- DISEÑO ----------
     // Column = apila los elementos en vertical (como un Auto Layout vertical en Figma).
@@ -99,50 +117,55 @@ fun LoginScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        // --- Campo de correo ---
-        // OutlinedTextField es el campo de texto con borde de Material 3: ya trae
-        // la etiqueta flotante y el borde morado al enfocar. "isError" lo pone rojo.
-        OutlinedTextField(
-            value = email,
-            onValueChange = { viewModel.onEmailChange(it) }, // viewmodel
-            label = { Text(stringResource(R.string.campo_correo)) },
-            singleLine = true,
-            isError = hayError,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth(),
-        )
+        // Column que agrupa los dos campos para que tiemblen juntos
+        Column(modifier = Modifier.offset(x = temblor.value.dp))
+        {
 
-        Spacer(Modifier.height(16.dp))
+            // --- Campo de correo ---
+            // OutlinedTextField es el campo de texto con borde de Material 3: ya trae
+            // la etiqueta flotante y el borde morado al enfocar. "isError" lo pone rojo.
+            OutlinedTextField(
+                value = email,
+                onValueChange = { viewModel.onEmailChange(it) }, // viewmodel
+                label = { Text(stringResource(R.string.campo_correo)) },
+                singleLine = true,
+                isError = hayError,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                modifier = Modifier.fillMaxWidth(),
+            )
 
-        // --- Campo de contraseña ---
-        OutlinedTextField(
-            value = password,
-            onValueChange = { viewModel.onPasswordChange(it) }, // viewmodel
-            label = { Text(stringResource(R.string.campo_contrasena)) },
-            singleLine = true,
-            isError = hayError,
-            // "supportingText" es el texto pequeño bajo el campo: solo lo mostramos si hay error.
-            supportingText = { if (hayError) Text(stringResource(R.string.error_login)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            // Si la contraseña es visible mostramos el texto tal cual; si no, puntos.
-            visualTransformation = if (passwordVisible) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
-            // Icono del ojo a la derecha: al pulsarlo cambia el estado.
-            trailingIcon = {
-                IconButton(onClick = { viewModel.cambiarVisibilidad() }) { // viewmodel
-                    Icon(
-                        painter = painterResource(
-                            if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
-                        ),
-                        contentDescription = if (passwordVisible) stringResource(R.string.ocultar_contrasena) else stringResource(R.string.mostrar_contrasena),
-                    )
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-        )
+            Spacer(Modifier.height(16.dp))
+
+            // --- Campo de contraseña ---
+            OutlinedTextField(
+                value = password,
+                onValueChange = { viewModel.onPasswordChange(it) }, // viewmodel
+                label = { Text(stringResource(R.string.campo_contrasena)) },
+                singleLine = true,
+                isError = hayError,
+                // "supportingText" es el texto pequeño bajo el campo: solo lo mostramos si hay error.
+                supportingText = { if (hayError) Text(stringResource(R.string.error_login)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                // Si la contraseña es visible mostramos el texto tal cual; si no, puntos.
+                visualTransformation = if (passwordVisible) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+                // Icono del ojo a la derecha: al pulsarlo cambia el estado.
+                trailingIcon = {
+                    IconButton(onClick = { viewModel.cambiarVisibilidad() }) { // viewmodel
+                        Icon(
+                            painter = painterResource(
+                                if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
+                            ),
+                            contentDescription = if (passwordVisible) stringResource(R.string.ocultar_contrasena) else stringResource(R.string.mostrar_contrasena),
+                        )
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        } // fin de la Column que tiembla
 
         Spacer(Modifier.height(8.dp))
 

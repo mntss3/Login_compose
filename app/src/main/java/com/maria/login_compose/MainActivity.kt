@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,17 +77,22 @@ private fun App(
                 .fillMaxSize()
                 .padding(innerPadding),
         ) {
-            val nombre = nombreUsuario
-
-            if (nombre == null) {
-                LoginScreen(
-                    onLoginCorrecto = { nombreUsuario = it },
-                )
-            } else {
-                WelcomeScreen(
-                    nombre = nombre,
-                    onCerrarSesion = { nombreUsuario = null },
-                )
+            // Crossfade: fundido suave entre pantallas en vez de un salto brusco
+            Crossfade(
+                targetState = nombreUsuario,
+                animationSpec = tween(durationMillis = 600),
+                label = "cambioPantalla",
+            ) { nombre ->
+                if (nombre == null) {
+                    LoginScreen(
+                        onLoginCorrecto = { nombreUsuario = it },
+                    )
+                } else {
+                    WelcomeScreen(
+                        nombre = nombre,
+                        onCerrarSesion = { nombreUsuario = null },
+                    )
+                }
             }
 
             IconButton(

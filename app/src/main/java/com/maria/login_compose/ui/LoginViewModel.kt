@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import kotlin.coroutines.EmptyCoroutineContext.get
 
 // ---------- DATOS DE PRUEBA (hardcodeados) ----------
-private const val CORREO_CORRECTO = "montesm.mail@gmail.com"
-private const val CLAVE_CORRECTA = "montesmaria"  // ahora la contraseña debe ser igual o mayor a 8 caracteres
-private const val NOMBRE_USUARIO = "María"
+private const val CORREO_CORRECTO = "prueba@gmail.com"
+private const val CLAVE_CORRECTA = "prueba12"  // ahora la contraseña debe ser igual o mayor a 8 caracteres
+private const val NOMBRE_USUARIO = "Manolo"
 
 private const val MINIMO_CARACTERES = 8   // longitud mínima de la contraseña
 

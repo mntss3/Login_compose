@@ -186,7 +186,7 @@ fun LoginScreen(
                     onLoginCorrecto(nombre)
                 }
             },
-            enabled = email.isNotBlank() && password.isNotBlank(),
+            enabled = viewModel.puedeIniciarSesion,   // la regla está en el ViewModel
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(stringResource(R.string.boton_iniciar_sesion))

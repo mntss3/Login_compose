@@ -4,11 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlin.coroutines.EmptyCoroutineContext.get
 
 // ---------- DATOS DE PRUEBA (hardcodeados) ----------
 private const val CORREO_CORRECTO = "montesm.mail@gmail.com"
-private const val CLAVE_CORRECTA = "1234"
+private const val CLAVE_CORRECTA = "montesmaria"  // ahora la contraseña debe ser igual o mayor a 8 caracteres
 private const val NOMBRE_USUARIO = "María"
+
+private const val MINIMO_CARACTERES = 8   // longitud mínima de la contraseña
 
 class LoginViewModel : ViewModel() {
 
@@ -38,6 +41,11 @@ class LoginViewModel : ViewModel() {
     fun cambiarVisibilidad() {
         passwordVisible = !passwordVisible
     }
+
+    // El botón solo se activa si hay correo y la contraseña tiene al menos 8 caracteres.
+    // Como email y password son "estado", Compose lo vuelve a comprobar cada vez que escribes.
+    val puedeIniciarSesion: Boolean
+        get() = email.isNotBlank() && password.length >= MINIMO_CARACTERES
 
     fun iniciarSesion(): String? {
         return if (email.trim() == CORREO_CORRECTO && password == CLAVE_CORRECTA) {

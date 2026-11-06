@@ -31,7 +31,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import androidx.annotation.StringRes
 import java.time.LocalTime
-
+import androidx.compose.foundation.layout.Box
 /*
  * PANTALLA 2: BIENVENIDA
  *
@@ -47,9 +47,12 @@ fun WelcomeScreen(
     modifier: Modifier = Modifier,
 ) {
     // Column con "horizontalAlignment" centra todos sus hijos en horizontal.
-    Column(
-        modifier = modifier
-            .fillMaxSize()
+    Box(modifier = modifier.fillMaxSize()) {
+        FondoCristal()
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -98,6 +101,7 @@ fun WelcomeScreen(
         }
 
         Spacer(Modifier.height(16.dp))
+    }
     }
 }
 

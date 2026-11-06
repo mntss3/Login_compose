@@ -88,6 +88,8 @@ fun LoginScreen(
             .fillMaxSize()
             .imePadding(),
     ) {
+        FondoCristal()
+
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -113,6 +115,8 @@ fun LoginScreen(
 
         Spacer(Modifier.height(32.dp))
 
+        TarjetaCristal {
+
         // Column que agrupa los dos campos para que tiemblen juntos
         Column(modifier = Modifier.offset(x = temblor.value.dp))
         {
@@ -125,6 +129,7 @@ fun LoginScreen(
                 onValueChange = { viewModel.onEmailChange(it) }, // viewmodel
                 label = { Text(stringResource(R.string.campo_correo)) },
                 singleLine = true,
+                shape = MaterialTheme.shapes.medium,
                 isError = hayError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth(),
@@ -138,6 +143,7 @@ fun LoginScreen(
                 onValueChange = { viewModel.onPasswordChange(it) }, // viewmodel
                 label = { Text(stringResource(R.string.campo_contrasena)) },
                 singleLine = true,
+                shape = MaterialTheme.shapes.medium,
                 isError = hayError,
                 // "supportingText" es el texto pequeño bajo el campo: solo lo mostramos si hay error.
                 supportingText = { if (hayError) Text(stringResource(R.string.error_login)) },
@@ -187,7 +193,9 @@ fun LoginScreen(
                 }
             },
             enabled = viewModel.puedeIniciarSesion,   // la regla está en el ViewModel
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
         ) {
             Text(stringResource(R.string.boton_iniciar_sesion))
         }
@@ -212,13 +220,16 @@ fun LoginScreen(
         // --- Botón con contorno ---
         OutlinedButton(
             onClick = { /* pendiente: iniciar sesión con Google */ },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
             // Texto en el color primario (lila), como en el diseño de Figma.
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         ) {
             Text(stringResource(R.string.continuar_google))
         }
 
+        }
         // Este Spacer "elástico" ocupa TODO el espacio libre que sobra,
         // y así el pie queda pegado abajo (como el "Espacio flexible" de Figma).
         Spacer(Modifier.weight(1f))

@@ -5,7 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.Color
 // Un "ColorScheme" asigna cada color a su ROL dentro de Material 3.
 // Los componentes (Button, OutlinedTextField...) leen estos roles solos,
 // por eso no hace falta pintar cada uno a mano.
@@ -48,14 +50,41 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = OnSurfaceDark,
 )
 
+// Anima un color: cuando cambia el objetivo, pasa poco a poco del color actual al nuevo.
+@Composable
+private fun animarColor(objetivo: Color): Color =
+    animateColorAsState(
+        targetValue = objetivo,
+        animationSpec = tween(durationMillis = 500),
+        label = "colorTema",
+    ).value
+
 @Composable
 fun Login_composeTheme(
     // Por defecto sigue el ajuste del móvil (tema claro u oscuro).
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-    // Sin color dinámico: la app se ve igual en todos los móviles.
-    val colores = if (darkTheme) DarkColorScheme else LightColorScheme
+    // Esquema al que queremos llegar
+    val objetivo = if (darkTheme) DarkColorScheme else LightColorScheme
+
+    // Copia del esquema con cada color animado: al cambiar de modo,
+    // todos se mezclan suavemente durante medio segundo en vez de saltar.
+    val colores = objetivo.copy(
+        primary = animarColor(objetivo.primary),
+        onPrimary = animarColor(objetivo.onPrimary),
+        primaryContainer = animarColor(objetivo.primaryContainer),
+        onPrimaryContainer = animarColor(objetivo.onPrimaryContainer),
+        secondary = animarColor(objetivo.secondary),
+        tertiary = animarColor(objetivo.tertiary),
+        background = animarColor(objetivo.background),
+        onBackground = animarColor(objetivo.onBackground),
+        surface = animarColor(objetivo.surface),
+        onSurface = animarColor(objetivo.onSurface),
+        onSurfaceVariant = animarColor(objetivo.onSurfaceVariant),
+        outline = animarColor(objetivo.outline),
+        outlineVariant = animarColor(objetivo.outlineVariant),
+    )
 
     MaterialTheme(
         colorScheme = colores,

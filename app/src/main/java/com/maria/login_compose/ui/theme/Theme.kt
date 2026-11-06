@@ -60,6 +60,7 @@ fun Login_composeTheme(
     MaterialTheme(
         colorScheme = colores,
         typography = Typography,
+        shapes = Formas,
         content = content,
     )
 }

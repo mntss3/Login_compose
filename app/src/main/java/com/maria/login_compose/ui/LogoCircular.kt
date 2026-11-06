@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Brush
 
 /**
  * Logo: un círculo de color suave con un icono en el centro.
@@ -30,13 +31,18 @@ fun LogoCircular(
     Box(
         modifier = Modifier
             .size(72.dp)
-            .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
+            .background(
+                brush = Brush.linearGradient(
+                    listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.tertiary)
+                ),
+                CircleShape,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             painter = painterResource(icono),
             contentDescription = null,   // es decorativo: los lectores de pantalla lo ignoran
-            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.size(tamanoIcono),
         )
     }
